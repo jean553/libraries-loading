@@ -3,3 +3,4 @@ assembly_code
 output
 *.a
 *.o
+*.so
