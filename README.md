@@ -7,6 +7,7 @@ This is a short personal memo about static/shared libraries loading process.
 - [Static libraries](#static-libraries)
     * [Write C code](#write-c-code)
     * [Generate object files](#generate-object-files)
+    * [Generate archive file](#generate-archive-file)
 
 ## Static libraries
 
@@ -74,3 +75,20 @@ The files are generated through the following command:
 gcc -c mul.c -o mul.o
 gcc -c sum.c -o sum.o
 ```
+
+### Generate archive file
+
+The archive file `.a` is a group of `object` files, all together.
+
+![Image 2](images/second.png)
+
+The archive file is generated through the `ar` command:
+
+```sh
+ar rvs libstatic_library.a sum.o mul.o
+```
+
+The `rvs` option stand for: replacement, verbosity and add new "objects" (indices) to the archive,
+replace them if necessary.
+
+Note that no linking is done here. The unresolved symbols remain unresolved after the archive creation, even if the two concerned objects are part of the archive.
