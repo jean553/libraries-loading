@@ -156,3 +156,14 @@ collect2: error: ld returned 1 exit status
 
 In fact, `ld`, that is called by `gcc` after the compilation, cannot find where is defined the symbol `sum_and_mul`:
 as a complete part of the program cannot be found, the final output cannot be generated.
+
+This is also possible to cancel the linking attempt (using the GCC `c` option):
+
+```sh
+gcc -c -I static_library executable/main.c -o output
+```
+
+In that case, `output` is not the final executable but an `object` file, as we generated previously when compiling the library.
+The symbols are still unresolved.
+
+![Image 3](images/third.png)
