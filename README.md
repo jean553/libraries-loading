@@ -10,6 +10,7 @@ This is a short personal memo about static/shared libraries loading process.
     * [Generate archive file](#generate-archive-file)
     * [Write C program](#write-c-program)
     * [Compile C program](#compile-c-program)
+    * [Link the program with the library](#link-the-program-with-the-library)
 
 ## Static libraries
 
@@ -185,3 +186,7 @@ As the `mul` symbol is not resolved as well from the program point of view,
 then the definition of the `mul` function is moved to the program as well.
 
 ![Image 5](images/fifth.png)
+
+As the library content is now part of the final program, this program can be executed without the library.
+If the library is modified and if the modifications have to be applied to the program,
+then the program must be compiled again.
