@@ -4,16 +4,19 @@ This is a short personal memo about static/shared libraries loading process.
 
 ## Table of content
 
-- [Write C code](#write-c-code)
-- [Generate object files](#generate-object-files)
-- [Static libraries](#static-libraries)
-    * [Generate archive file](#generate-archive-file)
+- [Example C program](#example-c-program)
+    * [Write library C code](#write-c-code)
+    * [Generate object files](#generate-object-files)
     * [Write C program](#write-c-program)
     * [Compile C program](#compile-c-program)
+- [Static libraries](#static-libraries)
+    * [Generate archive file](#generate-archive-file)
     * [Link the program with the library](#link-the-program-with-the-library)
 - [Shared library](#shared-library)
 
-## Write C code
+## Example C program
+
+### Write library C code
 
 First, let's write some C code for our library. Our library is divided into four files:
  * `sum.c` and `sum.h` that contains a sum function definition and declaration,
@@ -53,7 +56,7 @@ int sum_and_mul(int first, int second);
 int mul(int first, int second);
 ```
 
-## Generate object files
+### Generate object files
 
 Object files are `compiled` files but not `linked` files.
 That means `symbols` are `not resolved` from one object to another.
@@ -75,31 +78,9 @@ gcc -c mul.c -o mul.o
 gcc -c sum.c -o sum.o
 ```
 
-## Static libraries
-
-Static libraries on Linux have the `.a` extension (for `archive`).
-This section goes througout the static library creation process in details.
-
-### Generate archive file
-
-The archive file `.a` is a group of `object` files, all together.
-
-![Image 2](images/second.png)
-
-The archive file is generated through the `ar` command:
-
-```sh
-ar rvs libstatic_library.a sum.o mul.o
-```
-
-The `rvs` option stand for: replacement, verbosity and add new "objects" (indices) to the archive,
-replace them if necessary.
-
-Note that no linking is done here. The unresolved symbols remain unresolved after the archive creation, even if the two concerned objects are part of the archive.
-
 ### Write C program
 
-We can know write a simple C program that uses the library:
+We can now write a simple C program that uses the library:
 
 ```c
 #include "sum.h"
@@ -169,6 +150,28 @@ In that case, `output` is not the final executable but an `object` file, as we g
 The symbols are still unresolved.
 
 ![Image 3](images/third.png)
+
+## Static libraries
+
+Static libraries on Linux have the `.a` extension (for `archive`).
+This section goes througout the static library creation process in details.
+
+### Generate archive file
+
+The archive file `.a` is a group of `object` files, all together.
+
+![Image 2](images/second.png)
+
+The archive file is generated through the `ar` command:
+
+```sh
+ar rvs libstatic_library.a sum.o mul.o
+```
+
+The `rvs` option stand for: replacement, verbosity and add new "objects" (indices) to the archive,
+replace them if necessary.
+
+Note that no linking is done here. The unresolved symbols remain unresolved after the archive creation, even if the two concerned objects are part of the archive.
 
 ### Link the program with the library
 
