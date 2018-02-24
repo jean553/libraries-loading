@@ -8,6 +8,8 @@ This is a short personal memo about static/shared libraries loading process.
     * [Write C code](#write-c-code)
     * [Generate object files](#generate-object-files)
     * [Generate archive file](#generate-archive-file)
+    * [Write C program](#write-c-program)
+    * [Compile C program](#compile-c-program)
 
 ## Static libraries
 
@@ -92,3 +94,65 @@ The `rvs` option stand for: replacement, verbosity and add new "objects" (indice
 replace them if necessary.
 
 Note that no linking is done here. The unresolved symbols remain unresolved after the archive creation, even if the two concerned objects are part of the archive.
+
+### Write C program
+
+We can know write a simple C program that uses the library:
+
+```c
+#include "sum.h"
+
+#include <stdio.h>
+
+int main()
+{
+    int value = sum_and_mul(1000, 2000);
+
+    printf("%d", value);
+
+    return 0;
+}
+```
+
+### Compile C program
+
+We can now simply compile the program (without linking):
+
+```sh
+gcc -S -I static_library executable/main.c -o assembly_code
+```
+
+Details for the command above:
+* `S` is the option to generate an assembly code output, not a binary one,
+* `I` is the path of the custom headers (we need the declaration of `sum_and_value` to be visible for the compiler),
+
+The output assembly is now in `assembly_code`.
+
+A few lines contain:
+
+```asm
+movl	$2000, %esi
+movl	$1000, %edi
+call	sum_and_mul@PLT
+```
+
+This is the call to the library function `sum_and_mul`.
+As we can see, the `sum_and_mul` content is not part of the compiled code for now,
+even if we would have fully compiled the program to binary format.
+
+Let's compile into binary:
+
+```sh
+gcc -I static_library executable/main.c -o output
+```
+
+The following error appears:
+
+```
+/tmp/cc4TOaG2.o: In function `main':
+main.c:(.text+0x13): undefined reference to `sum_and_mul'
+collect2: error: ld returned 1 exit status
+```
+
+In fact, `ld`, that is called by `gcc` after the compilation, cannot find where is defined the symbol `sum_and_mul`:
+as a complete part of the program cannot be found, the final output cannot be generated.
