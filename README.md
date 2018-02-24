@@ -191,3 +191,17 @@ then the definition of the `mul` function is moved to the program as well.
 As the library content is now part of the final program, this program can be executed without the library.
 If the library is modified and if the modifications have to be applied to the program,
 then the program must be compiled again.
+
+## Shared library
+
+It is now possible to group all the object files of the library into a `.so` file
+that will be the shared library file.
+
+```sh
+gcc -shared -o shared_library.so shared_library/mul.o shared_library/sum.o
+```
+
+As the static library, there is no linking of the library symbols at this moment.
+The resulted shared library file can be represented as follow:
+
+![Image 6](images/sixth.png)
