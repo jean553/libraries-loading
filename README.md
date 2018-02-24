@@ -13,6 +13,7 @@ This is a short personal memo about static/shared libraries loading process.
     * [Generate archive file](#generate-archive-file)
     * [Link the program with the library](#link-the-program-with-the-library)
 - [Shared library](#shared-library)
+    * [Generate a shared library file](#generate-a-shared-library-file)
 
 ## Example C program
 
@@ -156,7 +157,7 @@ The symbols are still unresolved.
 Static libraries on Linux have the `.a` extension (for `archive`).
 This section goes througout the static library creation process in details.
 
-### Generate archive file
+### Generate an archive file
 
 The archive file `.a` is a group of `object` files, all together.
 
@@ -196,6 +197,11 @@ If the library is modified and if the modifications have to be applied to the pr
 then the program must be compiled again.
 
 ## Shared library
+
+The shared library is a `.so` file. It is loaded dynamically at runtime of a program.
+The program uses functions and structures that are part of the dynamic library.
+
+### Generate a shared library file
 
 It is now possible to group all the object files of the library into a `.so` file
 that will be the shared library file.
