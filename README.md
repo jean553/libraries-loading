@@ -167,3 +167,21 @@ In that case, `output` is not the final executable but an `object` file, as we g
 The symbols are still unresolved.
 
 ![Image 3](images/third.png)
+
+### Link the program with the library
+
+The last step is now to take the `sum_and_mul` content, and move it into the final program.
+This action can be performed by linking the program with the library.
+
+```sh
+gcc -c -I static_library executable/main.c -o output -Lstatic_library/ -lstatic_library
+```
+
+First, the content and of the `sum_and_mul` function is copied from the library to the final binary.
+
+![Image 4](images/fourth.png)
+
+As the `mul` symbol is not resolved as well from the program point of view,
+then the definition of the `mul` function is moved to the program as well.
+
+![Image 5](images/fifth.png)
