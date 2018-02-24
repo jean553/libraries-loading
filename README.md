@@ -14,6 +14,7 @@ This is a short personal memo about static/shared libraries loading process.
     * [Link the program with the library](#link-the-program-with-the-library)
 - [Shared library](#shared-library)
     * [Generate a shared library file](#generate-a-shared-library-file)
+    * [Link the program with the library](#link-the-program-with-the-library)
 
 ## Example C program
 
@@ -207,10 +208,38 @@ It is now possible to group all the object files of the library into a `.so` fil
 that will be the shared library file.
 
 ```sh
-gcc -shared -o shared_library.so shared_library/mul.o shared_library/sum.o
+gcc -shared -o libshared_library.so shared_library/mul.o shared_library/sum.o
 ```
 
 As the static library, there is no linking of the library symbols at this moment.
 The resulted shared library file can be represented as follow:
 
 ![Image 6](images/sixth.png)
+
+### Link the program with the library
+
+Instead of static libraries, there is no copy of code from the library to the executable when linking a shared library.
+The only thing that happens is a check that all the functions of the executable exists into the given shared library,
+and that the shared library itself exists.
+
+The executable knows now that the shared library has to be loaded before loading the executable itself (at runtime).
+This data is stored into the executable (ELF format).
+
+```sh
+gcc -Ishared_library executable/main.c -o output -L. -lshared_library
+```
+
+What happened with this command can be represented as follow:
+
+![Image 7](images/seventh.png)
+
+This is possible to check what shared libraries have to be loaded for the executable using `ldd`:
+
+```sh
+> ldd output
+
+linux-vdso.so.1 (0x00007fffa53c9000)
+libshared_library.so => not found
+libc.so.6 => /usr/lib/libc.so.6 (0x00007f1a038c9000)
+/lib64/ld-linux-x86-64.so.2 => /usr/lib64/ld-linux-x86-64.so.2 (0x00007f1a03e82000)
+```
