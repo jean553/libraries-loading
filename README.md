@@ -4,20 +4,16 @@ This is a short personal memo about static/shared libraries loading process.
 
 ## Table of content
 
+- [Write C code](#write-c-code)
+- [Generate object files](#generate-object-files)
 - [Static libraries](#static-libraries)
-    * [Write C code](#write-c-code)
-    * [Generate object files](#generate-object-files)
     * [Generate archive file](#generate-archive-file)
     * [Write C program](#write-c-program)
     * [Compile C program](#compile-c-program)
     * [Link the program with the library](#link-the-program-with-the-library)
+- [Shared library](#shared-library)
 
-## Static libraries
-
-Static libraries on Linux have the `.a` extension (for `archive`).
-This section goes througout the static library creation process in details.
-
-### Write C code
+## Write C code
 
 First, let's write some C code for our library. Our library is divided into four files:
  * `sum.c` and `sum.h` that contains a sum function definition and declaration,
@@ -57,7 +53,7 @@ int sum_and_mul(int first, int second);
 int mul(int first, int second);
 ```
 
-### Generate object files
+## Generate object files
 
 Object files are `compiled` files but not `linked` files.
 That means `symbols` are `not resolved` from one object to another.
@@ -78,6 +74,11 @@ The files are generated through the following command:
 gcc -c mul.c -o mul.o
 gcc -c sum.c -o sum.o
 ```
+
+## Static libraries
+
+Static libraries on Linux have the `.a` extension (for `archive`).
+This section goes througout the static library creation process in details.
 
 ### Generate archive file
 
