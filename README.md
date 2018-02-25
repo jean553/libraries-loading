@@ -15,6 +15,8 @@ This is a short personal memo about static/shared libraries loading process.
 - [Shared library](#shared-library)
     * [Generate a shared library file](#generate-a-shared-library-file)
     * [Link the program with the library](#link-the-program-with-the-library)
+- [Shared library symbols resolution](#shared-library-symbols-resolution)
+    * [Load time relocation](#load-time-relocation)
 
 ## Example C program
 
@@ -243,3 +245,18 @@ libshared_library.so => not found
 libc.so.6 => /usr/lib/libc.so.6 (0x00007f1a038c9000)
 /lib64/ld-linux-x86-64.so.2 => /usr/lib64/ld-linux-x86-64.so.2 (0x00007f1a03e82000)
 ```
+
+## Shared library symbols resolution
+
+When a static library is linked with an executable, each symbol (function or data),
+is resolved and replace by a memory address (this address is an "offset" from the real
+address where the program will be loaded when executed).
+
+In other words, a final executable (with static library only) or without library at all looks like:
+
+![Image 8](images/eighth.png)
+
+*NOTE*: the process is really more complex than the schema above, but this is the general idea.
+
+Doing this with shared libraries is not possible. In fact, there is no way to know in advance
+where a shared library will be loaded when requesting a program to be executed.
