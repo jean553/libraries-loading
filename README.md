@@ -278,3 +278,9 @@ Once the program is loaded and the library is loaded as well, the resolution wit
 The "reallocation" of the symbol occurs and the program (in memory) now have all its symbols resolved:
 
 ![Image 9](images/tenth.png)
+
+This method has three main limitations:
+ * it takes time to relocate every unresolved symbol of the shared library when using it,
+ * the "shared library" is not shared between processes, and can't be anyway, as the relocation process requires that the library is only used with the current started process,
+ * the shared library code, when loaded into memory, has to be writable to perform relocation (security issue)
+(solution to these problem is Position-Independant Code)
