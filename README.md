@@ -271,3 +271,10 @@ and the relocations entries of the file now contains all the symbols that
 will have to be resolved at running time.
 
 ![Image 9](images/ninth.png)
+
+*NOTE*: compiling a program with one version of the library and executing the program with a different version of this library (example: differences between objects/functions names) causes the symbols lookup process to fail when the program is started.
+
+Once the program is loaded and the library is loaded as well, the resolution with the correct addresses into memory can take place.
+The "reallocation" of the symbol occurs and the program (in memory) now have all its symbols resolved:
+
+![Image 9](images/tenth.png)
