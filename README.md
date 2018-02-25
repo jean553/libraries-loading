@@ -260,3 +260,14 @@ In other words, a final executable (with static library only) or without library
 
 Doing this with shared libraries is not possible. In fact, there is no way to know in advance
 where a shared library will be loaded when requesting a program to be executed.
+
+### Load time relocation
+
+Using `load time relocation` requires not to use `-fPIC` option when creating object files from the library sources.
+This flag is used for Position-Independant Code, that is another solution for symbols resolution.
+
+When compiling the library into `.so` final file, symbols are not resolved
+and the relocations entries of the file now contains all the symbols that
+will have to be resolved at running time.
+
+![Image 9](images/ninth.png)
