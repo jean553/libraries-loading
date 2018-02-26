@@ -293,3 +293,15 @@ In that case, positions of symbols (functions, variables...) is independant,
 no matter what program loads it, so there is no load-time relocation required.
 
 The position of each item is calculated according offsets and positions of other items into the library.
+
+#### Data
+
+During the linking process, there is absolutely no way to know in advance the address of the used data (variable). This will be decided when starting the process. This is the same problem as before.
+
+Without PIC, a null (0x0) address is set and will be replaced when the program starts and when the library is loaded for the program.
+
+Using a PIC shared library is different: the library is loaded only once for all the programs that use it. The library is "shared" between programs and is not loaded only for one process but for all.
+
+As before, there is no way to determine the address of the variable:
+
+![Image 10](images/eleventh.png)
