@@ -17,6 +17,7 @@ This is a short personal memo about static/shared libraries loading process.
     * [Link the program with the library](#link-the-program-with-the-library)
 - [Shared library symbols resolution](#shared-library-symbols-resolution)
     * [Load time relocation](#load-time-relocation)
+    * [PIC Position Idependant Code](#pic-position-independant-code)
 
 ## Example C program
 
@@ -284,3 +285,11 @@ This method has three main limitations:
  * the "shared library" is not shared between processes, and can't be anyway, as the relocation process requires that the library is only used with the current started process,
  * the shared library code, when loaded into memory, has to be writable to perform relocation (security issue)
 (solution to these problem is Position-Independant Code)
+
+### PIC Position Independant Code
+
+Position-Independant Code is another solution for shared library loading.
+In that case, positions of symbols (functions, variables...) is independant,
+no matter what program loads it, so there is no load-time relocation required.
+
+The position of each item is calculated according offsets and positions of other items into the library.
