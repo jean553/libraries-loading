@@ -293,3 +293,36 @@ In that case, positions of symbols (functions, variables...) is independant,
 no matter what program loads it, so there is no load-time relocation required.
 
 The position of each item is calculated according offsets and positions of other items into the library.
+
+#### Data
+
+During the linking process, there is absolutely no way to know in advance the address of the used data (variable). This will be decided when starting the process. This is the same problem as before.
+
+Without PIC, a null (0x0) address is set and will be replaced when the program starts and when the library is loaded for the program.
+
+Using a PIC shared library is different: the library is loaded only once for all the programs that use it. The library is "shared" between programs and is not loaded only for one process but for all.
+
+As before, there is no way to determine the address of the variable:
+
+![Image 10](images/eleventh.png)
+
+At the code position where the variable is used, some code is added to perform the following operations:
+ * get the current IP value: get the `instruction pointer` by pushing its value on the stack and getting it just after, this is possible by using the following assembly code (added automatically):
+
+```asm
+mov ax, value
+call next
+next:
+pop bx // bx now contains IP value
+```
+
+ * find the GOT (Global Offset Table) position using code added during the linking process (the GOT position of the library is known during the linking process),
+ * find the variable position and read it
+
+The final generated code is:
+
+![Image 11](images/twelfth.png)
+
+At execution, the following happens:
+
+![Image 12](images/thirteenth.png)
