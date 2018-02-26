@@ -265,7 +265,7 @@ where a shared library will be loaded when requesting a program to be executed.
 ### Load time relocation
 
 Using `load time relocation` requires not to use `-fPIC` option when creating object files from the library sources.
-This flag is used for Position-Independant Code, that is another solution for symbols resolution.
+This flag is used for Position-Independent Code, that is another solution for symbols resolution.
 
 When compiling the library into `.so` final file, symbols are not resolved
 and the relocations entries of the file now contains all the symbols that
@@ -284,11 +284,11 @@ This method has three main limitations:
  * it takes time to relocate every unresolved symbol of the shared library when using it,
  * the "shared library" is not shared between processes, and can't be anyway, as the relocation process requires that the library is only used with the current started process,
  * the shared library code, when loaded into memory, has to be writable to perform relocation (security issue)
-(solution to these problem is Position-Independant Code)
+(solution to these problem is Position-Independent Code)
 
-### PIC Position Independant Code
+### PIC Position Independent Code
 
-Position-Independant Code is another solution for shared library loading.
+Position-Independent Code is another solution for shared library loading.
 In that case, positions of symbols (functions, variables...) is independant,
 no matter what program loads it, so there is no load-time relocation required.
 
@@ -313,7 +313,7 @@ At the code position where the variable is used, some code is added to perform t
 mov ax, value
 call next
 next:
-pop bx // bx now contains IP value
+pop ebx ;ebx now contains IP value
 ```
 
  * find the GOT (Global Offset Table) position using code added during the linking process (the GOT position of the library is known during the linking process),
