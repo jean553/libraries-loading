@@ -307,10 +307,22 @@ As before, there is no way to determine the address of the variable:
 ![Image 10](images/eleventh.png)
 
 At the code position where the variable is used, some code is added to perform the following operations:
- * get the current IP value (instruction pointer),
- * find the GOT position,
+ * get the current IP value: get the `instruction pointer` by pushing its value on the stack and getting it just after, this is possible by using the following assembly code (added automatically):
+
+```asm
+mov ax, value
+call next
+next:
+pop bx // bx now contains IP value
+```
+
+ * find the GOT (Global Offset Table) position using code added during the linking process (the GOT position of the library is known during the linking process),
  * find the variable position and read it
 
 The final generated code is:
 
 ![Image 11](images/twelfth.png)
+
+At execution, the following happens:
+
+![Image 12](images/thirteenth.png)
