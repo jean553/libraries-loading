@@ -305,3 +305,12 @@ Using a PIC shared library is different: the library is loaded only once for all
 As before, there is no way to determine the address of the variable:
 
 ![Image 10](images/eleventh.png)
+
+At the code position where the variable is used, some code is added to perform the following operations:
+ * get the current IP value (instruction pointer),
+ * find the GOT position,
+ * find the variable position and read it
+
+The final generated code is:
+
+![Image 11](images/twelfth.png)
