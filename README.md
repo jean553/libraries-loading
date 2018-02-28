@@ -18,6 +18,8 @@ This is a short personal memo about static/shared libraries loading process.
 - [Shared library symbols resolution](#shared-library-symbols-resolution)
     * [Load time relocation](#load-time-relocation)
     * [PIC Position Idependant Code](#pic-position-independant-code)
+        - Data
+        - Procedures
 
 ## Example C program
 
@@ -326,3 +328,8 @@ The final generated code is:
 At execution, the following happens:
 
 ![Image 12](images/thirteenth.png)
+
+#### Procedures
+
+The way to call shared libraries functions is a bit different compared to data.
+In fact, shared libraries functions are "lazy", that means they are loaded in memory only if they are used at least once.
