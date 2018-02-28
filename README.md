@@ -329,7 +329,24 @@ At execution, the following happens:
 
 ![Image 12](images/thirteenth.png)
 
+The process to attribute symbols some real addresses into the memory is called "binding".
+
 #### Procedures
 
 The way to call shared libraries functions is a bit different compared to data.
 In fact, shared libraries functions are "lazy", that means they are loaded in memory only if they are used at least once.
+
+When the shared library is created, the functions addresses are not resolved. A `Procedure Linkage Table` contains some code to perform for each function.
+The PLT also contains a first chunk of code called the "resolver": its goal is to resolve a function address only when that function is called for the first time.
+
+The `Global Offset Table` also contains a pointer for every function. This pointer points to the PLT itself when the library is loaded,
+it will be replaced by the actual position of the function once the function has been called once. The library will really "resolve" the function at this moment.
+This is the role of the resolver (first set of code of the PLT).
+
+After generation, the library will be loaded to be used like this:
+
+![Image 13](images/fourteenth.png)
+
+As shown in the schema above, the resolver updates the GOT function entry with its real address in memory at runtime, when the function is called for the first time (at this moment, the resolver handles the lookup that is usually do directly after the program started: this binding process is heavy, in that case, it is only performed if the function is really called during the execution).
+
+After this operation, the GOT pointer points directly to the function. Any new call to the function is still handled through the PLT, but then the final function call be called, without using any resolver anymore.
