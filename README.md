@@ -355,4 +355,4 @@ After generation, the library will be loaded to be used like this:
 
 As shown in the schema above, the resolver updates the GOT function entry with its real address in memory at runtime, when the function is called for the first time (at this moment, the resolver handles the lookup that is usually do directly after the program started: this binding process is heavy, in that case, it is only performed if the function is really called during the execution).
 
-After this operation, the GOT pointer points directly to the function. Any new call to the function is still handled through the PLT, but then the final function call be called, without using any resolver anymore.
+After this operation, the GOT pointer points directly to the function. Any new call to the function is still handled through the PLT, but then the final function can be called, without using any resolver anymore.
