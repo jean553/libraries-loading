@@ -2,6 +2,12 @@
 
 This is a short personal memo about static/shared libraries loading process.
 
+## Sources
+
+Based on the following articles:
+ * https://eli.thegreenplace.net/2011/11/03/position-independent-code-pic-in-shared-libraries
+ * https://eli.thegreenplace.net/2011/08/25/load-time-relocation-of-shared-libraries
+
 ## Table of content
 
 - [Example C program](#example-c-program)
