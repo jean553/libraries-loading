@@ -17,7 +17,7 @@ This is a short personal memo about static/shared libraries loading process.
     * [Link the program with the library](#link-the-program-with-the-library)
 - [Shared library symbols resolution](#shared-library-symbols-resolution)
     * [Load time relocation](#load-time-relocation)
-    * [PIC Position Idependant Code](#pic-position-independant-code)
+    * [PIC Position Idependent Code](#pic-position-independent-code)
         - Data
         - Procedures
 
@@ -291,7 +291,7 @@ This method has three main limitations:
 ### PIC Position Independent Code
 
 Position-Independent Code is another solution for shared library loading.
-In that case, positions of symbols (functions, variables...) is independant,
+In that case, positions of symbols (functions, variables...) is independent,
 no matter what program loads it, so there is no load-time relocation required.
 
 The position of each item is calculated according offsets and positions of other items into the library.
