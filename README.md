@@ -23,7 +23,7 @@ Based on the following articles:
     * [Link the program with the library](#link-the-program-with-the-library)
 - [Shared library symbols resolution](#shared-library-symbols-resolution)
     * [Load time relocation](#load-time-relocation)
-    * [PIC Position Idependent Code](#pic-position-independent-code)
+    * [PIC Position Independent Code](#pic-position-independent-code)
         - Data
         - Procedures
 
