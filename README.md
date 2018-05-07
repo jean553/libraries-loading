@@ -229,12 +229,12 @@ The resulted shared library file can be represented as follow:
 
 ### Link the program with the library
 
-Instead of static libraries, there is no copy of code from the library to the executable when linking a shared library.
+Unlike static libraries, there is no copy of code from the library to the executable when linking a shared library.
 The only thing that happens is a check that all the functions of the executable exists into the given shared library,
 and that the shared library itself exists.
 
 The executable knows now that the shared library has to be loaded before loading the executable itself (at runtime).
-This data is stored into the executable (ELF format).
+This data is stored into the executable (ELF format for Executable and Linkable Format).
 
 ```sh
 gcc -Ishared_library executable/main.c -o output -L. -lshared_library
@@ -288,71 +288,28 @@ The "reallocation" of the symbol occurs and the program (in memory) now have all
 
 ![Image 9](images/tenth.png)
 
+With this method, reallocation into the shared library area are performed for the calling process only.
+Addresses/offsets from the shared library are modified in order to ensure link between the process code and the library
+(for example: jump from the shared library to the process code).
+
 This method has three main limitations:
  * it takes time to relocate every unresolved symbol of the shared library when using it,
+ * reallocation has to be performed everytime a different process uses the library,
  * the "shared library" is not shared between processes, and can't be anyway, as the relocation process requires that the library is only used with the current started process,
  * the shared library code, when loaded into memory, has to be writable to perform relocation (security issue)
 (solution to these problem is Position-Independent Code)
 
 ### PIC Position Independent Code
 
-Position-Independent Code is another solution for shared library loading.
-In that case, positions of symbols (functions, variables...) is independent,
-no matter what program loads it, so there is no load-time relocation required.
+In a non-PIC shared library, the symbols are resolved at the program execution time.
+The addresses of the library symbols are `absolute addresses` (from the process point of view)
+(data is accessed through absolute addresses, code jumps from absolute addresses to absolute addresses...).
+Access/browse the library is fast, but a single copy of the shared library in the memory
+cannot be shared to multiple processes (absolute addresses are different).
 
-The position of each item is calculated according offsets and positions of other items into the library.
-
-#### Data
-
-During the linking process, there is absolutely no way to know in advance the address of the used data (variable). This will be decided when starting the process. This is the same problem as before.
-
-Without PIC, a null (0x0) address is set and will be replaced when the program starts and when the library is loaded for the program.
-
-Using a PIC shared library is different: the library is loaded only once for all the programs that use it. The library is "shared" between programs and is not loaded only for one process but for all.
-
-As before, there is no way to determine the address of the variable:
-
-![Image 10](images/eleventh.png)
-
-At the code position where the variable is used, some code is added to perform the following operations:
- * get the current IP value: get the `instruction pointer` by pushing its value on the stack and getting it just after, this is possible by using the following assembly code (added automatically):
-
-```asm
-mov ax, value
-call next
-next:
-pop ebx ;ebx now contains IP value
-```
-
- * find the GOT (Global Offset Table) position using code added during the linking process (the GOT position of the library is known during the linking process),
- * find the variable position and read it
-
-The final generated code is:
-
-![Image 11](images/twelfth.png)
-
-At execution, the following happens:
-
-![Image 12](images/thirteenth.png)
-
-The process to attribute symbols some real addresses into the memory is called "binding".
-
-#### Procedures
-
-The way to call shared libraries functions is a bit different compared to data.
-In fact, shared libraries functions are "lazy", that means they are loaded in memory only if they are used at least once.
-
-When the shared library is created, the functions addresses are not resolved. A `Procedure Linkage Table` contains some code to perform for each function.
-The PLT also contains a first chunk of code called the "resolver": its goal is to resolve a function address only when that function is called for the first time.
-
-The `Global Offset Table` also contains a pointer for every function. This pointer points to the PLT itself when the library is loaded,
-it will be replaced by the actual position of the function once the function has been called once. The library will really "resolve" the function at this moment.
-This is the role of the resolver (first set of code of the PLT).
-
-After generation, the library will be loaded to be used like this:
-
-![Image 13](images/fourteenth.png)
-
-As shown in the schema above, the resolver updates the GOT function entry with its real address in memory at runtime, when the function is called for the first time (at this moment, the resolver handles the lookup that is usually do directly after the program started: this binding process is heavy, in that case, it is only performed if the function is really called during the execution).
-
-After this operation, the GOT pointer points directly to the function. Any new call to the function is still handled through the PLT, but then the final function can be called, without using any resolver anymore.
+In a PIC shared library, the symbols are not resolved at the program execution time, the program simply knows the address of the library.
+The addresses of the library symbols are `relative addresses` (within the library code itself)
+(data is accessed through relative addresses, code jumps n bytes before/after its current position).
+Access/browse the library is slower as there is one indirection level to considere
+(relative jumps, relative data access, push the current IP pointer on stack, functions lazy loading...).
+The exact same copy of the shared library in memory can be shared between multiple processes.
